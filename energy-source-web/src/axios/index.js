@@ -1,5 +1,5 @@
+import store from '@/redux/store'
 import axios from 'axios'
-import { store } from '../redux/store'
 
 const api = axios.create({
   baseURL: process.env.REACT_APP_BASE_URL
@@ -7,7 +7,7 @@ const api = axios.create({
 
 const axiosInstance = async (url, method = 'GET', data = null, token = null, headers = {}) => {
   try {
-    const stateToken = store.getState()?.admin?.auth?.token
+    const stateToken = store.getState()?.auth?.token
     const accessToken = token && token !== null ? token : stateToken
 
     if (accessToken) {
