@@ -9,6 +9,7 @@ import PersonIcon from '@mui/icons-material/Person';
 import { useRouter, usePathname } from 'next/navigation';
 import { useDispatch } from 'react-redux';
 import { setUserData, setUserToken } from '@/redux/slice/authSlice';
+import Cookies from "js-cookie";
 
 const drawerWidth = 240;
 
@@ -24,6 +25,7 @@ export default function Layout({ children }) {
     dispatch(setUserToken(null))
     dispatch(setUserData(null))
     router.push('/login')
+    Cookies.remove('token')
   }
 
   return (

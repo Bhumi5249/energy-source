@@ -1,9 +1,10 @@
 import axiosInstance from '@/axios';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
-export const addSource = createAsyncThunk('source/addSource', async ({ name, type, capacity }, { rejectWithValue }) => {
+export const addSource = createAsyncThunk('source/addSource', async ({ name, type, capacity }, { rejectWithValue, dispatch }) => {
   try {
     const response = await axiosInstance('/addSource', 'POST', { name, type, capacity });
+    dispatch(getSourceList())
     return response.data;
   } catch (error) {
     return rejectWithValue(error.response.data);

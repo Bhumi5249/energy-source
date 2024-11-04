@@ -53,8 +53,10 @@ export default function Source() {
 
   return (
     <Layout>
+     <div style={{ display: 'flex', justifyContent: 'space-between' }}>
       <h1>Energy Source Content</h1>
       <Button variant="contained" color="primary" onClick={handleOpenAddModal}>Add Source</Button>
+      </div>
 
       <TableContainer component={Paper} sx={{ marginTop: 2 }}>
         <Table>
@@ -67,7 +69,7 @@ export default function Source() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {sources.map((source, index) => (
+            {sources && sources.map((source, index) => (
               <TableRow key={source.sourcesId || index}>
                 <TableCell>{source.name}</TableCell>
                 <TableCell>{source.type}</TableCell>
