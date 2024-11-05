@@ -40,7 +40,7 @@ export default function Layout({ children }) {
       >
         <Toolbar sx={{ display:'flex', justifyContent: 'space-between' }}>
           <Typography variant="h6" noWrap component="div">
-            My Application
+            Energy Source
           </Typography>
           <Button onClick={handleLogout} sx={{ color: '#fff'}}>Logout</Button>
         </Toolbar>

@@ -5,7 +5,7 @@ import Cookies from "js-cookie";
 
 export const login = createAsyncThunk('auth/login', async ({ email, password, router },{dispatch,}) => {
     try {
-        const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/auth/signIn`, {email, password})
+        const response = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/auth/signIn`, {email, password})
         if(response){
             dispatch(setUserToken(response?.data?.data?.accessToken))
             router.push('/dashboard')
