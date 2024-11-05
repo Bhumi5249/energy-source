@@ -10,6 +10,7 @@ import { useRouter, usePathname } from 'next/navigation';
 import { useDispatch } from 'react-redux';
 import { setUserData, setUserToken } from '@/redux/slice/authSlice';
 import Cookies from "js-cookie";
+import UseAuthorization from '@/app/utility/useAuthorization';
 
 const drawerWidth = 240;
 
@@ -20,7 +21,10 @@ export default function Layout({ children }) {
   const handleNavigation = (path) => {
     router.push(path);
   };
-
+  const canViewAnalytics = UseAuthorization('LIST_ANALYTICS')
+  const canViewSource = UseAuthorization('LIST_SOURCE')
+  const canViewProduction = UseAuthorization('LIST_PRODUCTION')
+  const canViewUser = UseAuthorization('LIST_USER')
   const handleLogout = () => {
     dispatch(setUserToken(null))
     dispatch(setUserData(null))
@@ -38,11 +42,11 @@ export default function Layout({ children }) {
           ml: `${drawerWidth}px`,
         }}
       >
-        <Toolbar sx={{ display:'flex', justifyContent: 'space-between' }}>
+        <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
           <Typography variant="h6" noWrap component="div">
             Energy Source
           </Typography>
-          <Button onClick={handleLogout} sx={{ color: '#fff'}}>Logout</Button>
+          <Button onClick={handleLogout} sx={{ color: '#fff' }}>Logout</Button>
         </Toolbar>
       </AppBar>
       <Drawer
@@ -59,8 +63,8 @@ export default function Layout({ children }) {
       >
         <Toolbar />
         <List>
-          <ListItem 
-            onClick={() => handleNavigation('/dashboard')} 
+          {canViewAnalytics && <ListItem
+            onClick={() => handleNavigation('/dashboard')}
             selected={pathname === '/dashboard'}
             sx={{
               backgroundColor: pathname === '/dashboard' ? 'primary.light' : 'inherit',
@@ -74,9 +78,10 @@ export default function Layout({ children }) {
               <DashboardIcon />
             </ListItemIcon>
             <ListItemText primary="Dashboard" />
-          </ListItem>
-          <ListItem 
-            onClick={() => handleNavigation('/source')} 
+          </ListItem>}
+
+          {canViewSource && <ListItem
+            onClick={() => handleNavigation('/source')}
             selected={pathname === '/source'}
             sx={{
               backgroundColor: pathname === '/source' ? 'primary.light' : 'inherit',
@@ -90,9 +95,10 @@ export default function Layout({ children }) {
               <SourceIcon />
             </ListItemIcon>
             <ListItemText primary="Source" />
-          </ListItem>
-          <ListItem 
-            onClick={() => handleNavigation('/production')} 
+          </ListItem>}
+
+          {canViewProduction && <ListItem
+            onClick={() => handleNavigation('/production')}
             selected={pathname === '/production'}
             sx={{
               backgroundColor: pathname === '/production' ? 'primary.light' : 'inherit',
@@ -106,9 +112,10 @@ export default function Layout({ children }) {
               <ProductionIcon />
             </ListItemIcon>
             <ListItemText primary="Production" />
-          </ListItem>
-          <ListItem 
-            onClick={() => handleNavigation('/user')} 
+          </ListItem>}
+
+          {canViewUser && <ListItem
+            onClick={() => handleNavigation('/user')}
             selected={pathname === '/user'}
             sx={{
               backgroundColor: pathname === '/user' ? 'primary.light' : 'inherit',
@@ -122,7 +129,8 @@ export default function Layout({ children }) {
               <PersonIcon />
             </ListItemIcon>
             <ListItemText primary="User" />
-          </ListItem>
+          </ListItem>}
+
         </List>
       </Drawer>
       <Box

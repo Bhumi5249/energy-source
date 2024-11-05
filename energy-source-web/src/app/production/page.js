@@ -10,6 +10,7 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import Layout from '@/components/Layout';
 import { getSourceList } from '@/redux/api/sourceApi';
 import { addProduction, deleteProduction, getProductionList, updateProduction } from '@/redux/api/productionApi';
+import UseAuthorization from '../utility/useAuthorization';
 
 export default function Production() {
   const dispatch = useDispatch();
@@ -20,6 +21,8 @@ export default function Production() {
   const [formData, setFormData] = useState({ sourcesId: '', date: null, production: '' });
   const [editId, setEditId] = useState(null);
   const [deleteId, setDeleteId] = useState(null);
+  const canEdit = UseAuthorization('EDIT_PRODUCTION')
+  const canDelete = UseAuthorization('DELETE_PRODUCTION')
 
   useEffect(() => {
     dispatch(getProductionList());
@@ -82,8 +85,8 @@ export default function Production() {
                   <TableCell>{prod.date}</TableCell>
                   <TableCell>{prod.production}</TableCell>
                   <TableCell>
-                    <Button variant="outlined" color="primary" onClick={() => handleEditSource(prod)}>Edit</Button>
-                    <Button variant="outlined" color="secondary" onClick={() => handleOpenDeleteModal(prod.productionId)}>Delete</Button>
+                    {canEdit && <Button variant="outlined" color="primary" onClick={() => handleEditSource(prod)}>Edit</Button>}
+                    {canDelete && <Button variant="outlined" color="secondary" onClick={() => handleOpenDeleteModal(prod.productionId)}>Delete</Button>}
                   </TableCell>
                 </TableRow>
               ))}

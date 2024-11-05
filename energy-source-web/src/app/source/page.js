@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Dialog, DialogActions, DialogContent, DialogTitle, TextField } from '@mui/material';
 import Layout from '@/components/Layout';
 import { addSource, deleteSource, getSourceList, updateSource } from '@/redux/api/sourceApi';
+import UseAuthorization from '../utility/useAuthorization';
 
 export default function Source() {
   const dispatch = useDispatch();
@@ -15,7 +16,8 @@ export default function Source() {
   const [formData, setFormData] = useState({ name: '', type: '', capacity: '' });
   const [editId, setEditId] = useState(null);
   const [deleteId, setDeleteId] = useState(null);
-
+  const canEdit = UseAuthorization('EDIT_SOURCE')
+  const canDelete = UseAuthorization('DELETE_SOURCE')
   useEffect(() => {
     dispatch(getSourceList());
   }, [dispatch]);
@@ -53,9 +55,9 @@ export default function Source() {
 
   return (
     <Layout>
-     <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-      <h1>Energy Source Content</h1>
-      <Button variant="contained" color="primary" onClick={handleOpenAddModal}>Add Source</Button>
+      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+        <h1>Energy Source Content</h1>
+        <Button variant="contained" color="primary" onClick={handleOpenAddModal}>Add Source</Button>
       </div>
 
       <TableContainer component={Paper} sx={{ marginTop: 2 }}>
@@ -75,8 +77,8 @@ export default function Source() {
                 <TableCell>{source.type}</TableCell>
                 <TableCell>{source.capacity}</TableCell>
                 <TableCell>
-                  <Button variant="outlined" color="primary" onClick={() => handleEditSource(source)}>Edit</Button>
-                  <Button variant="outlined" color="secondary" onClick={() => handleOpenDeleteModal(source.sourcesId)}>Delete</Button>
+                  {canEdit && <Button variant="outlined" color="primary" onClick={() => handleEditSource(source)}>Edit</Button>}
+                  {canDelete && <Button variant="outlined" color="secondary" onClick={() => handleOpenDeleteModal(source.sourcesId)}>Delete</Button>}
                 </TableCell>
               </TableRow>
             ))}

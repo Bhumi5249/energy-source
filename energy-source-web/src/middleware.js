@@ -1,7 +1,7 @@
 // src/middleware.js
 import { NextResponse } from "next/server";
 
-const loggedInRoutes = ["/dashboard"];
+const loggedInRoutes = ["/dashboard", "/source", "/user", "/production"];
 const loggedOutRoutes = ["/login"];
 
 export default async function AuthMiddleware(req) {

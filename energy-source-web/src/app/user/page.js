@@ -24,6 +24,7 @@ import {
 } from '@mui/material';
 import Layout from '@/components/Layout';
 import { addUser, deleteUser, getRoles, getUser, updateUser } from '@/redux/api/userApi';
+import UseAuthorization from '../utility/useAuthorization';
 
 export default function User() {
   const dispatch = useDispatch();
@@ -33,7 +34,8 @@ export default function User() {
   const [formData, setFormData] = useState({ userName: '', email: '', password: '', roleId: '' });
   const [editId, setEditId] = useState(null);
   const [deleteId, setDeleteId] = useState(null);
-
+  const canEdit = UseAuthorization('EDIT_USER')
+  const canDelete = UseAuthorization('DELETE_USER')
   useEffect(() => {
     dispatch(getUser());
     dispatch(getRoles())
@@ -94,8 +96,8 @@ export default function User() {
                 <TableCell>{user.email}</TableCell>
                 <TableCell>{user.roleName}</TableCell>
                 <TableCell>
-                  <Button variant="outlined" color="primary" onClick={() => handleEditUser(user)}>Edit</Button>
-                  <Button variant="outlined" color="secondary" onClick={() => handleOpenDeleteModal(user.userId)}>Delete</Button>
+                  {canEdit && <Button variant="outlined" color="primary" onClick={() => handleEditUser(user)}>Edit</Button>}
+                  {canDelete && <Button variant="outlined" color="secondary" onClick={() => handleOpenDeleteModal(user.userId)}>Delete</Button>}
                 </TableCell>
               </TableRow>
             ))}
