@@ -9,6 +9,7 @@ import Layout from '@/components/Layout';
 import { Chart, registerables } from 'chart.js'; 
 import { useDispatch, useSelector } from 'react-redux';
 import { getProductionListByRange } from '@/redux/api/productionApi';
+import axios from 'axios';
 
 export default function Dashboard() {
   const [startDate, setStartDate] = useState(null);
@@ -35,6 +36,24 @@ export default function Dashboard() {
   //     fetchProductionData();
   //   }
   // }, [startDate, endDate]);
+
+  const downloadCSV = async () => {
+    try {
+      const response = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/productions/download`, {
+        params: { startDate, endDate },
+        responseType: 'blob', // Important for file downloads
+      });
+
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', 'production_data.csv');
+      document.body.appendChild(link);
+      link.click();
+    } catch (error) {
+      console.error("Error downloading CSV:", error);
+    }
+  };
 
   const chartData = {
     labels: productionData && productionData.map(data => new Date(data.date).toLocaleDateString()),
@@ -67,6 +86,9 @@ export default function Dashboard() {
         </div>
         <Button variant="contained" color="primary" onClick={fetchProductionData}>
           Fetch Data
+        </Button>
+        <Button variant="contained" color="primary" onClick={downloadCSV}>
+          Export Data
         </Button>
       </LocalizationProvider>
       {productionData && productionData.length > 0 && (
